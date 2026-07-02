@@ -1,0 +1,35 @@
+# Official NVIDIA CUDA base image with Ubuntu 22.04 and cuDNN 8 for GPU support
+FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
+
+# Configuring environment variables for non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Installing python and other necessary packages
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3-pip \
+    python3.11-dev \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Setting Python 3.11 as the default python
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 \
+    && update-alternatives --set python3 /usr/bin/python3.11 \
+    && ln -sf /usr/bin/python3 /usr/bin/python
+
+# Installing UV
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Setting working directory
+WORKDIR /app
+
+# Copying dependency files
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies (uv will automatically detect the GPU when installing PyTorch/TensorFlow)
+RUN uv pip install --system -r pyproject.toml
+
+# Exposing and publishing the port for Jupyter Lab
+EXPOSE 8888
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser", "--NotebookApp.token='mi_token_secreto'"]
