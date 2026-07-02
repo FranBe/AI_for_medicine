@@ -26,6 +26,8 @@ Repository for the course ***AI for medicine***, from DeepLearning.ai.
 Notes from each course can be found in de notes parent folder. You can see them from here too:
 
 - [Prognosis course](/notes/course1_prognosis.md)
+- [Diagnosis course](/notes/course2_diagnosis.md)
+- [Treatment course](/notes/course3_treatment.md)
 
 
 
