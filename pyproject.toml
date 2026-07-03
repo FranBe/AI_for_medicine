@@ -8,5 +8,6 @@ dependencies = [
     "numpy",
     "pandas",
     "seaborn",
-    "matplotlib"
+    "matplotlib",
+    "jupyter"
     ]
